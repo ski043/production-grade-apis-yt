@@ -1,0 +1,34 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tutorial {
+  id      String @id @default(uuid())
+  title   String
+  slug    String @unique
+  content String
+
+  status   TutorialStatus @default(Draft)
+  tags     String[]
+  authorId String
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  @@index([authorId])
+  @@index([status])
+  @@index([createdAt, id])
+}
+
+enum TutorialStatus {
+  Draft
+  Published
+  Archived
+}
